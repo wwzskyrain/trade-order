@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="study.erik.trade.order.db.DraftOrderMapper">
+
+    <resultMap id="result"
+               type="study.erik.trade.order.domain.entity.DraftOrder">
+        <result property="draftOrderId" column="DRAFT_ORDER_ID"/>
+        <result property="buyerId" column="BUYER_ID"/>
+        <result property="domain" column="DOMAIN"/>
+        <result property="businessTypeId" column="BUSINESS_TYPE_ID"/>
+        <result property="unifiedOrderNo" column="UNIFIED_ORDER_NO"/>
+        <result property="amount" column="AMOUNT"/>
+        <result property="statusId" column="STATUS_ID"/>
+        <result property="context" column="CONTEXT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="lastUpdateTime" column="LAST_UPDATE_TIME"/>
+        <result property="version" column="VERSION"/>
+    </resultMap>
+
+    <sql id="sql_select">
+        SELECT
+        DRAFT_ORDER_ID,
+        BUYER_ID,
+        DOMAIN,
+        BUSINESS_TYPE_ID,
+        UNIFIED_ORDER_NO,
+        STATUS_ID,
+        AMOUNT,
+        CONTEXT,
+        VERSION,
+        CREATE_TIME,
+        LAST_UPDATE_TIME
+        FROM
+        CRD_DRAFT_ORDER
+    </sql>
+
+    <select id="findByDraftOrderId" resultMap="result">
+        <include refid="sql_select"/>
+        WHERE DRAFT_ORDER_ID = #{draftOrderId}
+    </select>
+
+    <select id="findByBuyerId" resultMap="result">
+        <include refid="sql_select"/>
+        WHERE BUYER_ID = #{buyerId}
+    </select>
+
+    <select id="findByBuyerIdAndBusinessTypeId" resultMap="result">
+        <include refid="sql_select"/>
+        WHERE BUYER_ID = #{buyerId}
+        AND BUSINESS_TYPE_ID = #{businessTypeId}
+    </select>
+</mapper>

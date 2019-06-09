@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="orderAppRule" class="com.ximalaya.xdal.rule.config.beans.AppRule">
+        <property name="masterRule" ref="orderRwRule"/>
+        <property name="slaveRule" ref="orderRwRule"/>
+    </bean>
+
+    <bean id="orderRwRule" class="com.ximalaya.xdal.rule.config.beans.ShardRule">
+        <property name="tableRules">
+            <map>
+                <entry key="CRD_DRAFT_ORDER" value-ref="orderTableRule"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="orderTableRule" class="com.ximalaya.xdal.rule.config.beans.TableRule"
+          init-method="init">
+        <property name="dbIndexes" value="master_4"/>
+        <property name="dbRuleArray">
+            <list>
+                <value>
+                    return study.erik.trade.order.util.ShardingRuleParser.parseDbIndex(#BUSINESS_TYPE_ID#);
+                </value>
+            </list>
+        </property>
+        <property name="tbSuffix" value="resetForEachDB:[_00-_99]"/>
+        <property name="tbRuleArray">
+            <list>
+                <value>
+                    return study.erik.trade.order.util.ShardingRuleParser.parseTbIndex(#BUYER_ID#);
+                </value>
+            </list>
+        </property>
+    </bean>
+</beans>

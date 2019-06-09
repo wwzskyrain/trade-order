@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+       default-autowire="byName">
+
+    <util:properties id="jdbc" location="classpath:jdbc.properties"/>
+
+    <bean id="OrderApp" class="com.ximalaya.xdal.client.config.bean.XdalAppBean">
+        <property name="appName" value="OrderApp"/>
+        <property name="dbmode" value="prd"/>
+        <property name="appDataSourceList">
+            <list>
+                <ref bean="orderLogicDataSource"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="orderLogicDataSource" class="com.ximalaya.xdal.client.config.bean.AppDataSourceBean">
+        <property name="appDataSourceName" value="orderLogicDataSource"/>
+        <property name="dataBaseType" value="MYSQL"/>
+        <property name="configType" value="SHARD"/>
+        <property name="appRule" ref="orderAppRule"/>
+        <property name="physicalDataSourceSet">
+            <set>
+                <ref bean="physicalDataSource4"/>
+            </set>
+        </property>
+    </bean>
+
+
+    <bean id="physicalDataSource4" class="com.ximalaya.xdal.client.config.bean.PhysicalDataSourceBean">
+        <property name="name" value="master_4"/>
+        <property name="jdbcUrl" value="#{jdbc['jdbc.url.4']}"/>
+        <property name="userName" value="#{jdbc['jdbc.username.4']}"/>
+        <property name="password" value="#{jdbc['jdbc.password.4']}"/>
+        <property name="minConn" value="#{jdbc['xdal.minConn.4']}"/>
+        <property name="maxConn" value="#{jdbc['xdal.maxConn.4']}"/>
+        <property name="blockingTimeoutMillis" value="180"/>
+        <property name="idleTimeoutMinutes" value="180"/>
+        <property name="preparedStatementCacheSize" value="100"/>
+        <property name="queryTimeout" value="5"/>
+        <property name="prefill" value="true"/>
+        <property name="connectionProperties">
+            <map>
+                <entry key="connectTimeout" value="2000"/>
+                <entry key="autoReconnect" value="true"/>
+                <entry key="initialTimeout" value="1"/>
+                <entry key="maxReconnects" value="2"/>
+                <entry key="socketTimeout" value="2000"/>
+                <entry key="failOverReadOnly" value="false"/>
+                <entry key="useUtf8Mb4" value="true"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

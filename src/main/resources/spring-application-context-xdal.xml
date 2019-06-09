@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="orderDataSource" class="com.ximalaya.xdal.client.jdbc.XdalDataSource" init-method="init"
+          destroy-method="close">
+        <property name="appName" value="OrderApp"/>
+        <property name="appDsName" value="orderLogicDataSource"/>
+        <property name="dbmode" value="prd"/>
+        <property name="configPath" value="classpath:xdal"/>
+    </bean>
+
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis-config-be-included-by-spring.xml"/>
+        <property name="dataSource" ref="orderDataSource"/>
+        <property name="mapperLocations">
+            <array>
+                <value>classpath:mapper/*.xml</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  <!-- 配置后，可用@Autowire来自动注入Mapper接口。 -->
+        <property name="addToConfig" value="true"/>
+        <property name="basePackage" value="study.erik.trade.order.db"/>
+    </bean>
+
+</beans>
