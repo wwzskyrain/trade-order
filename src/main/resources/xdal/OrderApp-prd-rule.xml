@@ -22,7 +22,7 @@
         <property name="dbRuleArray">
             <list>
                 <value>
-                    return study.erik.trade.order.util.ShardingRuleParser.parseDbIndex(#BUSINESS_TYPE_ID#);
+                    return study.erik.trade.order.util.XdalShardingRuleParser.parseDbIndex(#BUSINESS_TYPE_ID#);
                 </value>
             </list>
         </property>
@@ -30,7 +30,7 @@
         <property name="tbRuleArray">
             <list>
                 <value>
-                    return study.erik.trade.order.util.ShardingRuleParser.parseTbIndex(#BUYER_ID#);
+                    return study.erik.trade.order.util.XdalShardingRuleParser.parseTbIndex(#BUYER_ID#);
                 </value>
             </list>
         </property>
